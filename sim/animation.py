@@ -42,23 +42,23 @@ if __name__ == "__main__":
     labels = ['Raider', 'Survivalist', 'Civilian', 'Zombie', 'Removed']
 
     fig, ax = plt.subplots()
-    axfreq = fig.add_axes([0.25, 0.1, 0.65, 0.03])
-    slider = Slider(
-        ax=axfreq,
-        label='Day',
-        valmin=1,
-        valmax=len(history[Group.RAIDER]) - 1,
-        valinit=1,
-        valstep=1,
-    )
+    # axfreq = fig.add_axes([0.25, 0.1, 0.65, 0.03])
+    # slider = Slider(
+    #     ax=axfreq,
+    #     label='Day',
+    #     valmin=1,
+    #     valmax=len(history[Group.RAIDER]) - 1,
+    #     valinit=1,
+    #     valstep=1,
+    # )
 
-    rax = fig.add_axes([0.0, 0, 0.15, 0.1])
-    check = CheckButtons(
-        ax=rax,
-        labels=['Animated']
-    )
+    # rax = fig.add_axes([0.0, 0, 0.15, 0.1])
+    # check = CheckButtons(
+    #     ax=rax,
+    #     labels=['Animated']
+    # )
     animation = Animation(day=1)
-    slider.on_changed(animation.set_day)
-    # ani = FuncAnimation(fig, animation.increment_day, frames=range(int(len(history[Group.RAIDER])), repeat=False)
+    # slider.on_changed(animation.set_day)
+    ani = FuncAnimation(fig, animation.set_day, frames=range(int(len(history[Group.RAIDER]))), interval=1, repeat=False)
 
     plt.show()

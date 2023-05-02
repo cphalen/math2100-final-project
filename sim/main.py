@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import pprint
 import copy
 
+ONE_YEAR = 365
+
 class Group(Enum):
     RAIDER = 1
     SURVIVALIST = 2
@@ -51,11 +53,11 @@ class Params:
     def exchange_rate(src_group: Group, dest_group: Group):
         match (src_group, dest_group):
             case (Group.RAIDER, Group.SURVIVALIST):
-                return 0.0009
+                return 0.0
             case (Group.SURVIVALIST, Group.RAIDER):
                 return 0.0008
             case (Group.SURVIVALIST, Group.CIVILIAN):
-                return 0.001
+                return 0.0
             case (Group.CIVILIAN, Group.SURVIVALIST):
                 return 0.0003
             case _:
@@ -69,7 +71,7 @@ class Sim:
             Group.SURVIVALIST: 1.0,
             Group.CIVILIAN: 1.0,
             Group.ZOMBIE: 1.0,
-            Group.REMOVED: 1.0
+            Group.REMOVED: 0,
         }
 
         self.history = {}
@@ -127,9 +129,10 @@ class Sim:
         # update state with new population values
         for group in updates.keys():
             self.populations[group] += updates[group]
+            self.populations[group] = max(self.populations[group], 0)
             self.history[group].append(self.populations[group])
 
-    def simulate(self):
+    def simulate(self, limit=None):
         i = 0
         while True:
             old_populations = copy.copy(self.populations)
@@ -140,7 +143,7 @@ class Sim:
             for group in old_populations.keys():
                 diff += abs(self.populations.get(group) - old_populations.get(group))
 
-            if diff < Params.EPSILON:
+            if diff < Params.EPSILON or (limit is not None and i >= limit):
                 print(i)
                 return
 
@@ -154,10 +157,13 @@ class Sim:
 
     def plot(self):
         for group, history in self.history.items():
-            plt.plot(list(range(len(history))), history, label=str(group), marker='o')
+            if group == Group.REMOVED:
+                # we don't need to display the removed
+                continue
+            plt.plot(list(range(len(history))), history, label=str(group), markersize=1)
 
-        plt.xlabel('time')
-        plt.ylabel('population')
+        plt.xlabel('time (days)')
+        plt.ylabel('population (relative to inital value)')
         plt.title('Group populations vs. time')
         plt.legend()
 
@@ -166,6 +172,6 @@ class Sim:
 
 if __name__ == "__main__":
     sim = Sim()
-    sim.simulate()
+    sim.simulate(limit=10*ONE_YEAR)
     sim.print()
     sim.plot()

@@ -34,5 +34,126 @@
 \begin{document}
 \maketitle
 
+Observe that
+\begin{align*}
+    S_R' &= \epsilon_{2,1} S_R S_S - \epsilon_{1,2} S_R S_S - \delta_1 S_R - \zeta_1 S_R Z \\
+    S_S' &= \epsilon_{1,2} S_R S_S + \epsilon_{3,2} S_S S_C - \epsilon_{2,1} S_R S_S - \epsilon_{2,3} S_S S_C - \delta_2 S_S - \zeta_2 S_S Z \\
+    S_C' &= \epsilon_{2,3} S_S S_C - \epsilon_{3,2} S_S S_C - \delta_3 S_C - \zeta_3 S_S Z \\
+    Z'   &= \zeta_1 S_R Z + \zeta_2 S_S Z + \zeta_3 S_C Z \\
+    C    &= S_R + S_S + S_C + Z
+\end{align*}
+where $C$ is some constant representing the sum of all populations. Because there is no birth rate and no death rate, $C$ will be constant. \\
 
+In an equilibrium state, we would see
+\[
+    \begin{pmatrix}
+    \epsilon_{2,1} S_R S_S - \epsilon_{1,2} S_R S_S - \delta_1 S_R - \zeta_1 S_R Z \\
+    \epsilon_{1,2} S_R S_S + \epsilon_{3,2} S_S S_C - \epsilon_{2,1} S_R S_S - \epsilon_{2,3} S_S S_C - \delta_2 S_S - \zeta_2 S_S Z \\
+    \epsilon_{2,3} S_S S_C - \epsilon_{3,2} S_S S_C - \delta_3 S_C - \zeta_3 S_C Z \\
+    \zeta_1 S_R Z + \zeta_2 S_S Z + \zeta_3 S_C Z \\
+    S_R + S_S + S_C + Z
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        0 \\
+        0 \\
+        0 \\
+        0 \\
+        C
+    \end{pmatrix}
+\]
+
+Solving this system of equations yields a number of non-trivial solutions
+\[
+    S_R + S_c = C,\, S_S = 0,\, Z = 0
+\]
+In this equilibrium is when all the population is split between the raiders and the citizens, the zombies are eradicated though.
+\[
+    S_R = 0,\, S_S = C,\, S_c = 0,\, Z = 0 
+\]
+For this equilibrium, all of the population falls into the suvivialist group, the zombies are again ereadicated.
+\[
+    S_R = 0,\, S_S = 0,\, S_c = 0,\, Z = C
+\]
+Here, the entire population is infected and become zombeis.
+\[
+    S_R = \frac{C \zeta_2}{\epsilon_{1,2} - \epsilon_{2,1} - \zeta_1 + \zeta_2},\,
+    S_S = \frac{C \zeta_1}{-\epsilon_{1,2} + \epsilon_{2,1} + \zeta_1 - \zeta_2},\,
+    S_C = 0,\,
+    Z = \frac{C (\epsilon_{1,2} - \epsilon_{2,1})}{\epsilon_{1,2} - \epsilon_{2,1} - \zeta_1 + \zeta_2}
+\]
+Perhaps a more intruiging equilibrium, population is split between raider, survivalist, and zombie populations. However, this is actually an invalid equilibrium because it does not match the constraint that $S_R, S_S, S_C, Z \geq 0$. To demonstrate this, observe that the denominator for $S_R$ is
+\[
+    \epsilon_{1,2} - \epsilon_{2,1} - \zeta_1 + \zeta_2
+\]
+while the demoninator for $S_S$ is
+\[
+    -\epsilon_{1,2} + \epsilon_{2,1} + \zeta_1 - \zeta_2
+\]
+because these are additive inverse, we know that one must be positive and the other negative. Therefore one of $S_R$ or $S_S$ must be negative, meaning we break the constraint of all populations being positive.
+\[
+    S_R = \frac{C \zeta_3}{\zeta_3 - \zeta_1},\,
+    S_S = 0,\,
+    S_C = \frac{C \zeta_1}{\zeta_1 - \zeta_3},\,
+    Z = 0
+\]
+This next equilibrium has the same issue, $\zeta_3 - \zeta_1$ and $\zeta_1 - \zeta_3$ are additive inverses so one must be negative, resulting in $S_R$ or $S_C$ being negative.
+\[
+    S_R = \frac{C (\epsilon_{2,3} - \epsilon_{3,2})}{\epsilon_{1,2} - \epsilon_{2,1} + \epsilon_{2,3} - \epsilon_{3,2}},\,
+    S_S = 0,\,
+    S_C = \frac{C (\epsilon_{1,2} - \epsilon_{2,1})}{\epsilon_{1,2} - \epsilon_{2,1} + \epsilon_{2,3} - \epsilon_{3,2}},\,
+    Z = 0
+\]
+which is our final equilibrium that is valid (for certain values of $\epsilon_{1,2}, \epsilon_{2, 1}, \epsilon_{2, 3}, \epsilon_{3, 2}$). Not qutie sure yet what those values are or what this equilibrium looks like but we can definitely look into it.
+
+Now for stability analysis. The Jacobian will be
+\[
+    \resizebox{\linewidth}{!}{%
+    $\displaystyle
+    \begin{pmatrix}
+        \epsilon_{2, 1} S_S - \epsilon_{1, 2} S_S - \delta_1 - \zeta_1 Z & \epsilon_{2, 1} S_R - \epsilon_{1, 2} S_R & 0 & \zeta_1 S_R \\
+        \epsilon_{1, 2} S_S - \epsilon_{2, 1} S_S & \epsilon_{1, 2} S_R + \epsilon_{3, 2} S_C - \epsilon_{2, 1} S_R - \epsilon_{2, 3} S_C - \delta_2 - \zeta_2 Z & \epsilon_{3, 2} S_S - \epsilon_{3, 2} S_S & \zeta_2 S_S \\
+        0 & \epsilon_{2, 3} S_C - \epsilon_{3, 2} S_C & \epsilon_{2, 3} S_S - \epsilon_{3, 2} S_S - \delta_3 - \zeta_3 Z & \zeta_3 S_C \\
+        \zeta_1 Z & \zeta_2 Z & \zeta_3 Z & \zeta_1 S_R + \zeta_2 S_S + \zeta_3 S_C
+    \end{pmatrix}
+    $}
+\]
+Plugging in
+\[
+    S_R = \frac{C (\epsilon_{2,3} - \epsilon_{3,2})}{\epsilon_{1,2} - \epsilon_{2,1} + \epsilon_{2,3} - \epsilon_{3,2}},\,
+    S_S = 0,\,
+    S_C = \frac{C (\epsilon_{1,2} - \epsilon_{2,1})}{\epsilon_{1,2} - \epsilon_{2,1} + \epsilon_{2,3} - \epsilon_{3,2}},\,
+    Z = 0
+\]
+we have
+\[
+    \begin{pmatrix}
+        \delta_1 - \zeta_1 Z & \epsilon_{2, 1} S_R - \epsilon_{1, 2} S_R & 0 & \zeta_1 S_R \\
+        0 & \epsilon_{1, 2} S_R + \epsilon_{3, 2} S_C - \epsilon_{2, 1} S_R - \epsilon_{2, 3} S_C - \delta_2 - \zeta_2 Z & 0 & 0 \\
+        0 & \epsilon_{2, 3} S_C - \epsilon_{3, 2} S_C & \delta_3 - \zeta_3 Z & \zeta_3 S_C \\
+        \zeta_1 Z & \zeta_2 Z & \zeta_3 Z & \zeta_1 S_R + \zeta_3 S_C
+    \end{pmatrix}
+\]
+which further simplifies to
+\[
+    \begin{pmatrix}
+        - \delta_1 & \frac{C (\epsilon_{1, 2} - \epsilon_{2, 1})(\epsilon_{2,3} - \epsilon_{3,2})}{\epsilon_{1,2} - \epsilon_{2,1} + \epsilon_{2,3} - \epsilon_{3,2}} & 0 & \frac{C \zeta_1 (\epsilon_{2,3} - \epsilon_{3,2})}{\epsilon_{1,2} - \epsilon_{2,1} + \epsilon_{2,3} - \epsilon_{3,2}} \\
+        0 & \frac{2 C (\epsilon_{1, 2} - \epsilon_{2, 1})(\epsilon_{2,3} - \epsilon_{3,2})}{\epsilon_{1,2} - \epsilon_{2,1} + \epsilon_{2,3} - \epsilon_{3,2}} - \delta_2 & 0 & 0\\
+        0 & \frac{C (\epsilon_{1, 2} - \epsilon_{2, 1})(\epsilon_{2,3} - \epsilon_{3,2})}{\epsilon_{1,2} - \epsilon_{2,1} + \epsilon_{2,3} - \epsilon_{3,2}} & - \delta_3 & \frac{C \zeta_3 (\epsilon_{1,2} - \epsilon_{2,1})}{\epsilon_{1,2} - \epsilon_{2,1} + \epsilon_{2,3} - \epsilon_{3,2}} \\
+        0 & 0 & 0 & C \cdot \frac{\zeta_1 (\epsilon_{1, 2} - \epsilon_{2, 1}) + \zeta_3 (\epsilon_{2,3} - \epsilon_{3,2})}{\epsilon_{1,2} - \epsilon_{2,1} + \epsilon_{2,3} - \epsilon_{3,2}}
+    \end{pmatrix}
+\]
+this matrix has eigenvalues
+\[
+    -\delta_1
+\]
+\[
+    -\delta_3
+\]
+\[
+    \frac{-\delta_2 \epsilon_{1,2} + \delta_2 \epsilon_{2,1} - \delta_2 \epsilon_{2,3} + 2 C \epsilon_{1,2} \epsilon_{2,3} - 2 C \epsilon_{2,1} \epsilon_{2,3} + \delta_2 \epsilon_{3,2} - 2 C \epsilon_{1,2} \epsilon_{3,2} + 2 C \epsilon_{2,1} \epsilon_{3,2}}{\epsilon_{1,2} - \epsilon_{2,1} + \epsilon_{2,3} - \epsilon_{3,2}}
+\]
+\[
+    \frac{C (\epsilon_{1,2} \zeta_1 - \epsilon_{2,1} \zeta_1 + \epsilon_{2,3} \zeta_3 - \epsilon_{3,2} \zeta_3)}{\epsilon_{1,2} - \epsilon_{2,1} + \epsilon_{2,3} - \epsilon_{3,2}}
+\]
 \end{document}
