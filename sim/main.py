@@ -53,15 +53,16 @@ class Params:
     def exchange_rate(src_group: Group, dest_group: Group):
         match (src_group, dest_group):
             case (Group.RAIDER, Group.SURVIVALIST):
-                return 0.0
+                return 0.0009
             case (Group.SURVIVALIST, Group.RAIDER):
                 return 0.0008
             case (Group.SURVIVALIST, Group.CIVILIAN):
-                return 0.0
+                return 0.001
             case (Group.CIVILIAN, Group.SURVIVALIST):
                 return 0.0003
             case _:
                 return None
+
             
 class Sim:
 
@@ -172,6 +173,6 @@ class Sim:
 
 if __name__ == "__main__":
     sim = Sim()
-    sim.simulate(limit=10*ONE_YEAR)
+    sim.simulate()
     sim.print()
     sim.plot()
